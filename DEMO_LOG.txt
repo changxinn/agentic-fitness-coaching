@@ -1,0 +1,83 @@
+=== FITNESS COACHING TEAM — DEMO LOG ===
+(Sample session for assignment deliverable)
+
+--- Profile setup ---
+Name: Jamie
+Goal: build strength
+Fitness level: beginner
+
+--- Turn 1 ---
+You: I want to start strength training. What should I do today?
+
+[HEAD COACH routes to training_planner]
+
+Alex (Training Planner): [uses Action: progress to check baseline]
+  -> Tool: get_progress_summary — no workouts logged yet
+
+Alex (Training Planner): Great starting point! For day one, try a full-body session:
+bodyweight squats 3x10, push-ups 3x8, plank 3x30 sec, and a 10-min walk cooldown.
+Log it when you're done and we'll progress next time.
+
+--- Turn 2 ---
+You: I finished squats and push-ups. Log workout: squats 3x10, push-ups 3x8, plank 3x30s
+
+[HEAD COACH routes to training_planner]
+
+Alex (Training Planner): [uses Action: log_workout: squats 3x10, push-ups 3x8, plank 3x30s]
+  -> Tool: Workout logged for 2026-06-18
+
+Alex (Training Planner): Logged! Solid first session — focus on form over weight.
+Rest tomorrow or do light walking; we'll add a row variation next time.
+
+--- Turn 3 ---
+You: What should I eat after this workout?
+
+[HEAD COACH routes to nutrition_advisor]
+
+Sam (Nutrition Advisor): Post-workout within 1–2 hours: protein + carbs.
+Example: grilled chicken, rice, and vegetables, or Greek yogurt with banana.
+Aim for ~20–30g protein. Want me to log a meal?
+
+--- Turn 4 ---
+You: I had chicken rice and iced milo for lunch. Please log it.
+
+[HEAD COACH routes to nutrition_advisor]
+
+Sam (Nutrition Advisor): [uses Action: log_meal: lunch chicken rice and iced milo]
+  -> Tool: Meal logged for 2026-06-18
+
+Sam (Nutrition Advisor): Logged! Good protein and carbs for recovery.
+Add a fruit or extra vegetables at dinner for fiber and micronutrients.
+
+--- Turn 5 ---
+You: I only slept 5 hours last night and feel tired.
+
+[HEAD COACH routes to recovery_coach]
+
+Jordan (Recovery Coach): [uses Action: log_sleep: 5 hours, poor]
+  -> Tool: Sleep logged for 2026-06-18
+
+Jordan (Recovery Coach): 5 hours is below target for recovery — especially after new training.
+Tonight: aim for 7–8 hours, limit screens 30 min before bed, and keep today's workout moderate.
+A rest day tomorrow is reasonable if fatigue persists.
+
+--- Turn 6 ---
+You: exit
+
+=== SESSION SUMMARY ===
+[Summarizer combines conversation + progress data]
+
+Topics: beginner strength plan, first workout logged, post-workout nutrition, sleep deficit.
+Commitments: full-body session completed; lunch logged; sleep issue noted.
+Tomorrow: prioritize sleep; consider rest or light activity.
+
+=== Progress Summary ===
+Today: 1 workout, 1 meal, 1 sleep log logged.
+...
+
+--- Key interactions demonstrated ---
+1. Orchestrator routed training vs nutrition vs recovery by user intent
+2. Tool access control: only Alex logs workouts; Sam logs meals; Jordan logs sleep
+3. Shared progress tool available to specialists (read-only summary)
+4. State carried profile + message history across turns
+5. Summarizer produced end-of-session report on exit

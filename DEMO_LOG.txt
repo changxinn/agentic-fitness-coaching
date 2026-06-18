@@ -1,83 +1,278 @@
-=== FITNESS COACHING TEAM — DEMO LOG ===
-(Sample session for assignment deliverable)
+Architecting Agentic AI Solutions\Day 4\workshop-3>uv run python main.py
+========================================================================
+                          FITNESS COACHING TEAM
+========================================================================
 
---- Profile setup ---
-Name: Jamie
-Goal: build strength
-Fitness level: beginner
+  Coaches: Alex (training) | Sam (nutrition) | Jordan (recovery)
+  The Head Coach routes each message to the right specialist.
 
---- Turn 1 ---
-You: I want to start strength training. What should I do today?
+  Commands:
+    - Type your question and press Enter
+    - Type  exit   to end session and see summary
+    - Press  Ctrl+C  to quit immediately
 
-[HEAD COACH routes to training_planner]
+  Backend trace is ON (routing + tools). Set DEBUG=true for full LLM logs.
 
-Alex (Training Planner): [uses Action: progress to check baseline]
-  -> Tool: get_progress_summary — no workouts logged yet
+  Profile setup (press Enter for defaults)
+  Note: 'exit' only works in the chat prompt below, not here.
 
-Alex (Training Planner): Great starting point! For day one, try a full-body session:
-bodyweight squats 3x10, push-ups 3x8, plank 3x30 sec, and a 10-min walk cooldown.
-Log it when you're done and we'll progress next time.
+  Name  [Test]: chang xin
+  Goal  [test]: Hyrox
+  Level [mid]: beginner
+  [SYS] System  Session logs cleared  (fresh workout/meal/sleep tracking)
+------------------------------------------------------------------------
+  YOUR PROFILE
+  Name   : chang xin
+  Goal   : Hyrox
+  Level  : beginner
+------------------------------------------------------------------------
 
---- Turn 2 ---
-You: I finished squats and push-ups. Log workout: squats 3x10, push-ups 3x8, plank 3x30s
+  Try asking:
+    > Plan a 4-day program for my goal
+    > Log workout: DB squats 3x10, rows 3x12
+    > I ate McDonald's for lunch — log it
+    > I slept 6 hours and my knee hurts
+    > How am I doing this week?
 
-[HEAD COACH routes to training_planner]
+  [SYS] System  Starting LangGraph session  (human -> orchestrator -> specialist)
 
-Alex (Training Planner): [uses Action: log_workout: squats 3x10, push-ups 3x8, plank 3x30s]
-  -> Tool: Workout logged for 2026-06-18
+  > plan a 4 day program for my goal. I am a complete beginner
 
-Alex (Training Planner): Logged! Solid first session — focus on form over weight.
-Rest tomorrow or do light walking; we'll add a row variation next time.
+------------------------------------------------------------------------
+  YOU
+  plan a 4 day program for my goal. I am a complete beginner
+------------------------------------------------------------------------
+  [ROUTE] Head Coach  New prompt received  (volley reset to 1)
+  [ROUTE] Head Coach  Analyzing intent  (calling LLM)
+  [ROUTE] Head Coach  Routing to specialist  (Alex (training_planner))
+  [TRAIN] Alex  Generating response  (calling LLM for training planner)
+  [TRAIN] Alex  Response ready  (27 words)
 
---- Turn 3 ---
-You: What should I eat after this workout?
+  [TRAIN] Alex -- Training Planner
+  ----------------------------------------------------------------------
+  * Day 1–2: Full‑body strength (squat, hinge, push, pull) plus easy
+    cardio base.
+  * Day 3–4: Strength progressions + conditioning and mobility; what
+    equipment do you have access to?
+  ----------------------------------------------------------------------
 
-[HEAD COACH routes to nutrition_advisor]
 
-Sam (Nutrition Advisor): Post-workout within 1–2 hours: protein + carbs.
-Example: grilled chicken, rice, and vegetables, or Greek yogurt with banana.
-Aim for ~20–30g protein. Want me to log a meal?
+  > I have dumbbells and barbells, knee injury from running, and I eat fast food often.
 
---- Turn 4 ---
-You: I had chicken rice and iced milo for lunch. Please log it.
+------------------------------------------------------------------------
+  YOU
+  I have dumbbells and barbells, knee injury from running, and I eat
+  fast food often.
+------------------------------------------------------------------------
+  [ROUTE] Head Coach  New prompt received  (volley reset to 1)
+  [ROUTE] Head Coach  Analyzing intent  (calling LLM)
+  [ROUTE] Head Coach  Routing to specialist  (Alex (training_planner))
+  [TRAIN] Alex  Generating response  (calling LLM for training planner)
+  [TRAIN] Alex  Response ready  (56 words)
 
-[HEAD COACH routes to nutrition_advisor]
+  [TRAIN] Alex -- Training Planner
+  ----------------------------------------------------------------------
+  * Day 1: Full‑body strength (knee‑friendly squats, hinge, push,
+    pull) + 15–20 min easy cardio.
+  * Day 2: Hypertrophy: RDL, shallow goblet squats, bench, row + core.
+  * Day 3: Conditioning + mobility: 15–25 min, low impact.
+  * Day 4: Progression: heavier safe lifts + short conditioning.
+  ----------------------------------------------------------------------
 
-Sam (Nutrition Advisor): [uses Action: log_meal: lunch chicken rice and iced milo]
-  -> Tool: Meal logged for 2026-06-18
 
-Sam (Nutrition Advisor): Logged! Good protein and carbs for recovery.
-Add a fruit or extra vegetables at dinner for fiber and micronutrients.
+  > Log meal: lunch fast food burger and fries
 
---- Turn 5 ---
-You: I only slept 5 hours last night and feel tired.
+------------------------------------------------------------------------
+  YOU
+  Log meal: lunch fast food burger and fries
+------------------------------------------------------------------------
+  [ROUTE] Head Coach  New prompt received  (volley reset to 1)
+  [ROUTE] Head Coach  Analyzing intent  (calling LLM)
+  [ROUTE] Head Coach  Routing to specialist  (Sam (nutrition_advisor))
+  [FOOD] Sam  Generating response  (calling LLM for nutrition advisor)
+  [FOOD] Sam  Auto-calling tool  (log_meal: lunch fast food burger and fries)
+  [FOOD] Sam  Tool result  (Meal logged for 2026-06-18: lunch fast food burger and fries)
+  [FOOD] Sam  Response ready  (40 words)
 
-[HEAD COACH routes to recovery_coach]
+  [FOOD] Sam -- Nutrition Advisor
+  ----------------------------------------------------------------------
+  * Noted: lunch fast food burger and fries.
+  * To support Hyrox, aim for 25–40 g protein, add veggies, swap fries
+    for salad or fruit, and choose a whole-grain bun; what healthy
+    swap will you try at your next meal?
+  ----------------------------------------------------------------------
 
-Jordan (Recovery Coach): [uses Action: log_sleep: 5 hours, poor]
-  -> Tool: Sleep logged for 2026-06-18
 
-Jordan (Recovery Coach): 5 hours is below target for recovery — especially after new training.
-Tonight: aim for 7–8 hours, limit screens 30 min before bed, and keep today's workout moderate.
-A rest day tomorrow is reasonable if fatigue persists.
+  > Log workout: upper body DB press 3x10, rows 3x12, 5km run
 
---- Turn 6 ---
-You: exit
+------------------------------------------------------------------------
+  YOU
+  Log workout: upper body DB press 3x10, rows 3x12, 5km run
+------------------------------------------------------------------------
+  [ROUTE] Head Coach  New prompt received  (volley reset to 1)
+  [ROUTE] Head Coach  Analyzing intent  (calling LLM)
+  [ROUTE] Head Coach  Routing to specialist  (Alex (training_planner))
+  [TRAIN] Alex  Generating response  (calling LLM for training planner)
+  [TRAIN] Alex  Auto-calling tool  (log_workout: upper body DB press 3x10, rows 3x12, 5km run)
+  [TRAIN] Alex  Tool result  (Workout logged for 2026-06-18: upper body DB press 3x10, rows 3x12, 5km run)
+  [TRAIN] Alex  Response ready  (43 words)
 
-=== SESSION SUMMARY ===
-[Summarizer combines conversation + progress data]
+  [TRAIN] Alex -- Training Planner
+  ----------------------------------------------------------------------
+  * Noted: workout logged — upper body DB press 3x10, rows 3x12, 5km
+    run (2026-06-18).
+  * For knee safety, keep cardio low‑impact and use knee‑friendly
+    movements; we’ll tailor days.
+  * Next step: what days this week can you commit to a 4‑day plan?
+  ----------------------------------------------------------------------
 
-Topics: beginner strength plan, first workout logged, post-workout nutrition, sleep deficit.
-Commitments: full-body session completed; lunch logged; sleep issue noted.
-Tomorrow: prioritize sleep; consider rest or light activity.
 
-=== Progress Summary ===
-Today: 1 workout, 1 meal, 1 sleep log logged.
-...
+  > Log sleep: 6 hours, fair
 
---- Key interactions demonstrated ---
-1. Orchestrator routed training vs nutrition vs recovery by user intent
-2. Tool access control: only Alex logs workouts; Sam logs meals; Jordan logs sleep
-3. Shared progress tool available to specialists (read-only summary)
-4. State carried profile + message history across turns
-5. Summarizer produced end-of-session report on exit
+------------------------------------------------------------------------
+  YOU
+  Log sleep: 6 hours, fair
+------------------------------------------------------------------------
+  [ROUTE] Head Coach  New prompt received  (volley reset to 1)
+  [ROUTE] Head Coach  Analyzing intent  (calling LLM)
+  [ROUTE] Head Coach  Routing to specialist  (Jordan (recovery_coach))
+  [REST] Jordan  Generating response  (calling LLM for recovery coach)
+  [REST] Jordan  Auto-calling tool  (log_sleep: 6 hours, fair)
+  [REST] Jordan  Tool result  (Sleep logged for 2026-06-18: 6 hours hours, quality: fair)
+  [REST] Jordan  Response ready  (33 words)
+
+  [REST] Jordan -- Recovery Coach
+  ----------------------------------------------------------------------
+  * Sleep log: 2026-06-18, 6 hours hours, quality: fair.
+  * Recovery note: target 7–9 hours most nights; add a simple wind-
+    down routine.
+  ----------------------------------------------------------------------
+
+
+  > How am I doing?
+
+------------------------------------------------------------------------
+  YOU
+  How am I doing?
+------------------------------------------------------------------------
+  [ROUTE] Head Coach  New prompt received  (volley reset to 1)
+  [ROUTE] Head Coach  Analyzing intent  (calling LLM)
+  [ROUTE] Head Coach  Routing to specialist  (Alex (training_planner))
+  [TRAIN] Alex  Generating response  (calling LLM for training planner)
+  [TRAIN] Alex  Auto-calling tool  (progress)
+  [TRAIN] Alex  Tool result  (=== Progress Summary === Goal: Hyrox Fitness level: beginner  Today (2026-06-18))
+  [TRAIN] Alex  Calling tool  (log_workout: upper body DB press 3x10, rows 3x12, 5km run
+Action: log_meal: lunch fast food burger and fries
+Action: log_sleep: 6 hours, fair
+Action: progress)
+  [TRAIN] Alex  Tool result  (Workout logged for 2026-06-18: upper body DB press 3x10, rows 3x12, 5km run Acti)
+  [TRAIN] Alex  Response ready  (45 words)
+
+  [TRAIN] Alex -- Training Planner
+  ----------------------------------------------------------------------
+  * Today’s data: 1 workout, 1 meal, 1 sleep log; progress starts but
+    we need more sleep.
+  * Nutrition: fast-food lunch noted; target 25–40 g protein +
+    veggies; swap fries for fruit/salad.
+  * Training: knee‑friendly plan started; which 4 days will you commit
+    this week?
+  ----------------------------------------------------------------------
+
+
+  > mon, weds, fri, sun
+
+------------------------------------------------------------------------
+  YOU
+  mon, weds, fri, sun
+------------------------------------------------------------------------
+  [ROUTE] Head Coach  New prompt received  (volley reset to 1)
+  [ROUTE] Head Coach  Analyzing intent  (calling LLM)
+  [ROUTE] Head Coach  Routing to specialist  (Alex (training_planner))
+  [TRAIN] Alex  Generating response  (calling LLM for training planner)
+  [TRAIN] Alex  Response ready  (12 words)
+
+  [TRAIN] Alex -- Training Planner
+  ----------------------------------------------------------------------
+  * I’ll add sets/reps and progression ranges for Mon/Wed/Fri/Sun to
+    drive progression.
+  ----------------------------------------------------------------------
+
+
+  > How am I doing?
+
+------------------------------------------------------------------------
+  YOU
+  How am I doing?
+------------------------------------------------------------------------
+  [ROUTE] Head Coach  New prompt received  (volley reset to 1)
+  [ROUTE] Head Coach  Analyzing intent  (calling LLM)
+  [ROUTE] Head Coach  Routing to specialist  (Alex (training_planner))
+  [TRAIN] Alex  Generating response  (calling LLM for training planner)
+  [TRAIN] Alex  Auto-calling tool  (progress)
+  [TRAIN] Alex  Tool result  (=== Progress Summary === Goal: Hyrox Fitness level: beginner  Today (2026-06-18))
+  [TRAIN] Alex  Tool blocked  (log_meal)
+
+  [TRAIN] Alex -- Training Planner
+  ----------------------------------------------------------------------
+  * What's your main focus today?
+  ----------------------------------------------------------------------
+
+
+  > exit
+
+------------------------------------------------------------------------
+  YOU
+  exit
+------------------------------------------------------------------------
+  [SYS] System  Ending session  (generating summary)
+  [SYS] System  Generating session summary
+
+========================================================================
+  SESSION SUMMARY
+========================================================================
+  Session summary (Hyrox beginner)
+  Main topics discussed
+  - Training: 4-day plan Mon/Wed/Fri/Sun with knee‑friendly strength (squat, hinge, push, pull), plus low‑impact cardio and mobility.
+  - Nutrition: current lunch logged; emphasis on protein target (25–40 g), veggies, and smarter swaps (salad/fruit instead of fries; whole‑grain bun).
+  - Recovery: sleep target 7–9 hours; establish a simple wind‑down routine.
+  Key advice given
+  - Prioritize knee‑friendly movements and low‑impact cardio; use progression on the four days.
+  - For meals, hit protein targets consistently and add vegetables; make smarter fast‑food swaps.
+  - Improve recovery with regular, longer sleep and a simple pre‑sleep routine.
+  Actions logged / commitments
+  - Meals logged: lunch fast food burger and fries.
+  - Workouts logged: two entries of upper‑body DB press 3x10, rows 3x12, plus 5 km run.
+  - Sleep logged: 6 hours, fair.
+  - Commitment: follow 4-day Mon/Wed/Fri/Sun plan; coach to add sets/reps and progression ranges for those days.
+  1–2 focus areas for tomorrow
+  - Focus on knee‑friendly form for main lifts and a light progression on Day 1, keeping cardio low‑impact.
+  - Plan a protein‑forward meal for better protein intake and start a simple wind‑down routine to improve sleep.
+  ---
+
+  --- Logged This Session ---
+  Goal: Hyrox
+  Fitness level: beginner
+  Today (2026-06-18):
+    Workouts logged: 2
+    Meals logged: 1
+    Sleep logs: 1
+  All-time totals: 2 workouts, 1 meals, 1 sleep entries
+  Today's workouts:
+    - upper body DB press 3x10, rows 3x12, 5km run
+    - upper body DB press 3x10, rows 3x12, 5km run
+  Action: log_meal: lunch fast food burger and fries
+  Action: log_sleep: 6 hours, fair
+  Action: progress
+  Today's meals:
+    - lunch fast food burger and fries
+  Today's sleep:
+    - 6 hoursh, quality: fair
+  Recent workouts:
+    [2026-06-18] upper body DB press 3x10, rows 3x12, 5km run
+    [2026-06-18] upper body DB press 3x10, rows 3x12, 5km run
+  Action: log_meal: lunch fast food burger and fries
+  Action: log_sleep: 6 hours, fair
+  Action: progress
+========================================================================
+
+  Session ended. Run again to start fresh, or review data/user_data.json

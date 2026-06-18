@@ -1,6 +1,6 @@
 # Fitness Coaching Team — Multi-Agent System
 
-A LangGraph-based multi-agent fitness coach that plans training, tracks nutrition and sleep, and summarizes your session. Built for the NUS-ISS Agentic AI workshop assignment.
+A LangGraph-based multi-agent fitness coach that plans training, tracks nutrition and sleep, and summarizes your session. Built for the NUS-ISS Agentic AI workshop 3.
 
 ## Overview
 
@@ -26,7 +26,6 @@ This system simulates a **coaching team** with distinct specialist agents:
 - [uv](https://docs.astral.sh/uv/) package manager
 - OpenAI API key (`OPENAI_API_KEY`)
 
-Recommended models (per assignment): `gpt-5-nano` or `gpt-5-mini` with `temperature=1`.
 
 ## Setup
 
@@ -42,10 +41,9 @@ DEBUG=true
 - **Backend trace** (routing + tools) is always shown in the terminal.
 - Set `DEBUG=true` for verbose raw LLM logs (thought/action iterations).
 
-3. Install dependencies and run (OneDrive users: use copy mode):
+3. Install dependencies and run:
 
 ```powershell
-$env:UV_LINK_MODE="copy"
 uv sync
 uv run python main.py
 ```
@@ -68,43 +66,8 @@ See `TEST_PROMPTS.md` for a full list of example prompts and a demo script.
 4. Read the specialist's short bullet response.
 5. Type `exit` to end the session and receive a summary.
 
-### Example prompts
-
-- `Plan a 4-day program. I have dumbbells and a barbell only.`
-- `I had chicken rice for lunch — log it`
-- `I only slept 5 hours and my knee hurts`
-- `How am I doing this week?`
-
-## Project structure
-
-```
-fitness-coach/
-├── main.py              # Entry point, graph build, CLI
-├── state.py             # Shared LangGraph state
-├── nodes.py             # Graph nodes (human, specialist, summarizer)
-├── display.py           # Terminal formatting and backend trace
-├── utils.py             # Verbose DEBUG logging
-├── agents/
-│   ├── orchestrator.py  # Head Coach router
-│   ├── specialist.py    # Training / nutrition / recovery agents
-│   └── summarizer.py    # Session summary
-├── tools/
-│   ├── log_workout.py
-│   ├── log_meal.py
-│   ├── log_sleep.py
-│   ├── get_progress.py
-│   └── storage.py       # JSON persistence
-└── data/                # Created at runtime (gitignored)
-```
 
 ## Demo log
 
 See `DEMO_LOG.txt` for a sample run highlighting agent routing, tool usage, and session summary.
 
-## Assignment checklist
-
-- [x] 3+ distinct agents with personas
-- [x] Orchestrator coordination (Head Coach)
-- [x] Tool integration with per-agent access control
-- [x] Shared state and message history
-- [x] LangGraph + OpenAI

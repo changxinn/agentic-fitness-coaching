@@ -61,6 +61,15 @@ def parse_user_intents(user_text: str) -> list[tuple[str, str]]:
     ):
         intents.append(("progress", ""))
 
+    if re.search(r"\b(?:bmi|body mass index)\b", lowered):
+        has_weight = re.search(r"\d+(?:\.\d+)?\s*(?:kg|kilograms?)\b", lowered)
+        has_height = re.search(
+            r"\d+(?:\.\d+)?\s*(?:cm|centimeters?|m|meters?)\b",
+            lowered,
+        )
+        if has_weight and has_height:
+            intents.append(("get_bmi", text))
+
     form = re.search(
         r"(?:good\s+)?form\s+for\s+(?:a\s+|an\s+)?([a-zA-Z\s\-]+?)(?:\?|$|\.)",
         text,

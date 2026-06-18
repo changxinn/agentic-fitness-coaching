@@ -42,6 +42,7 @@ Available specialists:
 Routing rules:
 - Training, workouts, exercises, gym, equipment, injuries affecting training -> training_planner
 - Food, meals, diet, protein, calories, hydration, fast food -> nutrition_advisor
+- BMI, weight and height calculations, body mass index -> nutrition_advisor
 - Sleep, tired, soreness recovery, rest days, stress, burnout -> recovery_coach
 - Progress check-ins ("how am I doing", "my progress") -> training_planner if workout-focused, nutrition_advisor if food-focused, recovery_coach if sleep-focused; default training_planner
 - Multi-topic messages: pick the PRIMARY topic in the user's LATEST message only

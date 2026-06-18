@@ -4,6 +4,7 @@ from tools import (
     log_meal,
     log_sleep,
     get_progress_summary,
+    get_bmi,
 )
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -26,7 +27,7 @@ AGENTS = {
         "role": "Sports nutrition specialist",
         "personality": "Practical, non-judgmental, emphasizes sustainable habits",
         "speech_style": "Friendly, concrete meal ideas, balances macros simply",
-        "tools": ["log_meal", "progress"],
+        "tools": ["log_meal", "get_bmi", "progress"],
     },
     "recovery_coach": {
         "name": "Jordan (Recovery Coach)",
@@ -42,6 +43,7 @@ TOOL_DESCRIPTIONS = {
     "exercise_lookup": "Look up exercise tips. Action format: exercise_lookup: squat",
     "log_meal": "Log a meal. Action format: log_meal: lunch chicken rice vegetables",
     "log_sleep": "Log sleep. Action format: log_sleep: 7.5 hours, good",
+    "get_bmi": "Calculate BMI from weight and height. Action format: get_bmi: 70 kg, 175 cm",
     "progress": "Get progress summary for workouts, meals, and sleep",
 }
 
@@ -69,6 +71,10 @@ def execute_tool(tool_name: str, argument: str = "") -> str:
         hours = parts[0].strip()
         quality = parts[1].strip() if len(parts) > 1 else "fair"
         return log_sleep(hours, quality)
+    if tool_name == "get_bmi":
+        if not argument:
+            return "Error: provide weight and height after get_bmi: e.g. 70 kg, 175 cm"
+        return get_bmi(argument)
     if tool_name == "progress":
         return get_progress_summary()
 
@@ -141,6 +147,7 @@ Action: log_workout: 20 min walk
 Action: exercise_lookup: squat
 Action: log_meal: breakfast oats and banana
 Action: log_sleep: 8 hours, excellent
+Action: get_bmi: 70 kg, 175 cm
 
 After enough information, output:
 Message: [Your coaching response]
